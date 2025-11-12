@@ -2,10 +2,9 @@
 
 def convert(_data):
     convert_str = _data
-    _mins = _hours = -1
     del_pos = 0
     for i in range(len(convert_str)):
-        if not convert_str[i].isdigit():
+        if convert_str[i] == " " or convert_str[i] == ":":
             del_pos = i
     return convert_str[:del_pos], convert_str[del_pos+1:]
 
@@ -73,7 +72,7 @@ def get_form_hours(_hours):
     if _hours % 10 == 1 and _hours // 10 != 1:
         return "час"
     elif 2 <= _hours % 10 <= 4 and _hours // 10 != 1:
-        return "часы"
+        return "часа"
     return "часов"
 
 
