@@ -78,16 +78,16 @@ def get_form_hours(_hours):
 
 def get_day_time(_hours):
     
-    if 0 <= _hours <= 5:
+    if 0 <= _hours < 6:
         return "ночи"
     
-    if 6 <= _hours <= 12:
+    if 6 <= _hours < 12:
         return "утра"
     
-    if 12 <= _hours <= 18:
+    if 12 <= _hours < 18:
         return "дня"
     
-    if 18 <= _hours <= 23:
+    if 18 <= _hours < 24:
         return "вечера"
 
 
