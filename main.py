@@ -16,6 +16,9 @@ def correct_checker(_data):
     isnum = True
     j = 0
     
+    if len(check_str) == 0:
+        return False
+    
     while j < len(check_str) and isnum:
         isnum = check_str[j].isdigit()
         j += 1
@@ -103,6 +106,7 @@ if __name__ == "__main__":
 main: получает строку, прогоняет через convert, отправляет вывод convert'а, выводит checker
 convert: принимает строку и возвращает 2 строки после разбивки
 checker: проверяет числа на соответствие условию и корректность ввода. если ввод корректный, return'ит worker, иначе возвращает ошибку
+correct_checker: проверяет верность двух строк, полученных при разбивке
 worker: обрабатывает и return'ит строку согласно условию, пользуясь get_form_mins, get_form_hours, get_daytime
 get_form_mins = get_form_hours, возвращают корректную форму для числа минут и часов соответственно
 get_daytime: возвращает время суток по часам
