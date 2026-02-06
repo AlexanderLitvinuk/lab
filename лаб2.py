@@ -17,8 +17,17 @@
 6. Если выбраны все типы сортировки, то данные выводятся в виде таблицы
 7. Конец программы.
 
+Сортировка пузырьком:
+1. Если последующий элемент меньше проверяемого, происходит обмен значений. Цикл проходит с первого до предпоследнего значения и повторяется n-1 раз.
 
-НАДО ФИКСАНУТЬ ПОДСЧЁТ ПРИРАВНИВАНИЙ
+Сортировка простым выбором:
+1. С правой стороны находятся отсортированные значения массива.
+2. Среди неотсортированных значений ищется наибольшее и перемещается в левый край правой части. Действие повторяется n-1 раз.
+
+Сортировка вставками:
+1. Выбирается число x из массива. Сначала это второй элемент.
+2. Число x вставляется между числом, находящимся слева от первоначальной позиции числа x, при этом меньшим, чем x, и следующим за ним числом.
+3. Операция повторяется n-1 раз, с каждым разом числом x становится следующее число.
 """
 
 
@@ -89,7 +98,11 @@ def menu():
         sort_all(list_itog)
     else:
         sort_info = sort_list(list_itog, n)
-        print("Результаты сортировки:\nОтсортированный список: ", *sort_info[0], "\nКоличество сравнений: ", sort_info[1], "\nКоличество приравниваний: ", sort_info[2])
+        if n == 3:
+            temp = "\nКоличество вставок: "
+        else:
+            temp = "\nКоличество обменов: "
+        print("Результаты сортировки:\nОтсортированный список: ", *sort_info[0], "\nКоличество сравнений: ", sort_info[1], temp, sort_info[2])
 
 
 def sort_list(lst, sort_type):
@@ -111,9 +124,7 @@ def sort_all(lst):
     print("======Результаты======".center(80))
     print("Вид сортировки".ljust(30), "Пузырьком".ljust(20), "Простым выбором".ljust(20), "Вставками".ljust(20))
     print("Кол-во сравнений".ljust(30), str(sort_info[0][1]).ljust(20), str(sort_info[1][1]).ljust(20), str(sort_info[2][1]).ljust(20))
-    print("Кол-во приравниваний".ljust(30), str(sort_info[0][2]).ljust(20), str(sort_info[1][2]).ljust(20), str(sort_info[2][2]).ljust(20))
-    print(sort_info)
-    print(sort_info[2][2])
+    print("Кол-во обменов/вставок".ljust(30), str(sort_info[0][2]).ljust(20), str(sort_info[1][2]).ljust(20), str(sort_info[2][2]).ljust(20))
 
 #Виды сортировок
 
@@ -127,7 +138,7 @@ def sort_bubble(sorted_list):
             if sorted_list[j] > sorted_list[j+1]:
                 sorted_list[j], sorted_list[j+1] = sorted_list[j+1], sorted_list[j]
                 ok = True
-                prirav += 2
+                prirav += 1
             srav += 1
     return sorted_list, srav, prirav
 
@@ -136,29 +147,27 @@ def sort_select(sorted_list):
     for i in range(len(sorted_list) -1, 0, -1):
         maxnum = sorted_list[i]
         maxpos = i
-        prirav += 1
         for j in range(i):
             if sorted_list[j] > maxnum:
                 maxnum = sorted_list[j]
-                prirav += 1
                 maxpos = j
             srav += 1
         sorted_list[maxpos], sorted_list[i] = sorted_list[i], sorted_list[maxpos]
-        prirav += 2
+        prirav += 1
     return sorted_list, srav, prirav
 
 def sort_insert(sorted_list):
     prirav = srav = 0
-    for i in range(2, len(sorted_list)):
+    for i in range(1, len(sorted_list)):
         x = sorted_list[i]
         j = i
-        while (j > 1 and sorted_list[j-1] > x):
+        while (j > 0 and sorted_list[j-1] > x):
             srav += 2
             sorted_list[j] = sorted_list[j-1]
             prirav += 1
             j -= 1
+            print(sorted_list)
         sorted_list[j] = x
-        prirav += 1
     return sorted_list, srav, prirav
 
 def main():
@@ -166,4 +175,3 @@ def main():
     
 if __name__ == "__main__":
     main()
-
