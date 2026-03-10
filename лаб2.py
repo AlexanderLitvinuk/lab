@@ -1,6 +1,20 @@
 """
-Алгоритм.
+АЛГОРИТМ ЛАБ2
 
+I. Сортировка пузырьком
+1. Два стоящих рядом элемента сравниваются. Если стоящий раньше элемент больше следующего, то элементы меняются местами.
+2. Это действие повторяется для всех элементов массива до тех пор, пока он не будет отсортирован.
+
+II. Сортировка простым выбором
+1. Сначала все позиции массива считаются неотсортированными. Среди неотсортированных элементов находится наибольший. Он меняется местами с крайним элементом отсортированной части массива. Теперь крайняя позиция неотсортированной части массива считается отсортированной.
+2. Это действие повторяется для всех элементов массива до тех пор, пока он не будет отсортирован.
+
+III. Сортировка вставками
+1. Выбирается элемент, начиная со второго. Среди всех элементов, которые стоят левее выбранного, ищется число, которое будет больше выбранного.
+2. Если такого числа нет, то полученное число встаёт в начало массива. В ином случае, число вставляется в массив перед тем числом, которое меньше него.
+3. Эти действия повторяются для всех элементов массива (начиная со 2) до тех пор, пока он не будет отсортирован.
+
+Остатки старого алгоритма:
 1. Открывается "меню". Введённый список очищается от лишних символов кроме цифр.
 2. Список рассматривается:
 а) Если длина списка после очистки равна 0, программа выводит сообщение о неправильных данных и открывает меню снова.
@@ -17,114 +31,28 @@
 6. Если выбраны все типы сортировки, то данные выводятся в виде таблицы
 7. Конец программы.
 
-Сортировка пузырьком:
-1. Если последующий элемент меньше проверяемого, происходит обмен значений. Цикл проходит с первого до предпоследнего значения и повторяется n-1 раз.
 
-Сортировка простым выбором:
-1. С правой стороны находятся отсортированные значения массива.
-2. Среди неотсортированных значений ищется наибольшее и перемещается в левый край правой части. Действие повторяется n-1 раз.
 
-Сортировка вставками:
-1. Выбирается число x из массива. Сначала это второй элемент.
-2. Число x вставляется между числом, находящимся слева от первоначальной позиции числа x, при этом меньшим, чем x, и следующим за ним числом.
-3. Операция повторяется n-1 раз, с каждым разом числом x становится следующее число.
+Вводится последовательность чисел
+Если в последовательности одно число, то
+    Если это число равно 0, то
+        Программа останавливается
+    Если это число не равно 0, то
+        Создаётся список из случайных чисел, по длине равный введённому числу
+Если в последовательности более 1 числа, то
+    Создаётся список из введённых чисел
+Выбирается тип сортировки
+    Если выбраны все виды, то
+        Происходят все виды сортировок и собираются данные об эффективности от каждой сортировки
+        Данные выводятся в виде отформатированной таблицы
+    Если выбран конкретный тип сортировки, то
+        Проходит один тип сортировки, собираются результаты данной сортировки
+        Отсортированный список и данные выводятся на экран
+
 """
 
 
 import random as r
-
-def isnum(number):
-    number_str = str(number)
-    if number_str[0] == "-":
-        number_str = number_str[1:]
-    if len(number_str) < 1:
-        return False
-    ok = True
-    i = 0
-    while ok and i < len(number_str):
-        ok = number_str[i].isdigit()
-        i += 1
-    return ok
-
-def separate(inp_list):
-    sep_list = []
-    junk_list = []
-    for i in range(len(inp_list)):
-        if isnum(inp_list[i]):
-            sep_list.append(int(inp_list[i]))
-        else:
-            junk_list.append(inp_list[i])
-    return sep_list, junk_list
-
-def newlist(length):
-    lst = [r.randint(-1000, 1000) for _ in range(length)]
-    return lst
-
-#Меню
-
-def menu():
-    print("Введите список. Если требуется сгенерировать случайный список, введите только 1 число - количество элементов.\nВведите 0, чтобы остановить программу.")
-    inp = input().split()
-    list_num, junk = separate(inp)
-    if len(list_num) == 0:
-        print("Не удалось распознать ввод.")
-        menu()
-        return
-    if len(list_num) == 1:
-        if list_num[0] == 0:
-            return
-        if list_num[0] < 0:
-            print("Не удалось распознать ввод.")
-            menu()            
-        list_itog = newlist(list_num[0])
-    else:
-        list_itog = list_num
-    
-    print("Выберите тип сортировки. 0 - все типы сортировки, 1 - пузырьком, 2 - простым выбором, 3 - вставками.")
-    n = input()
-    if(isnum(n)):
-        n = int(n)
-        if(n < 0 or n > 3):
-            print("Неверный тип сортировки.")
-            menu()
-            return
-    else:
-        print("Невозможно распознать данные.")
-        menu()
-        return
-    
-    sort_info = []
-    if n == 0:
-        sort_all(list_itog)
-    else:
-        sort_info = sort_list(list_itog, n)
-        if n == 3:
-            temp = "\nКоличество вставок: "
-        else:
-            temp = "\nКоличество обменов: "
-        print("Результаты сортировки:\nОтсортированный список: ", *sort_info[0], "\nКоличество сравнений: ", sort_info[1], temp, sort_info[2])
-
-
-def sort_list(lst, sort_type):
-    if sort_type == 1:
-        otv = sort_bubble(lst)
-    elif sort_type == 2:
-        otv = sort_select(lst)
-    elif sort_type == 3:
-        otv = sort_insert(lst)
-    else:
-        otv = (lst, 0, 0)
-    return otv
-
-def sort_all(lst):
-    sort_info = []
-    sort_info.append(sort_bubble(lst.copy()))
-    sort_info.append(sort_select(lst.copy()))
-    sort_info.append(sort_insert(lst.copy()))
-    print("======Результаты======".center(80))
-    print("Вид сортировки".ljust(30), "Пузырьком".ljust(20), "Простым выбором".ljust(20), "Вставками".ljust(20))
-    print("Кол-во сравнений".ljust(30), str(sort_info[0][1]).ljust(20), str(sort_info[1][1]).ljust(20), str(sort_info[2][1]).ljust(20))
-    print("Кол-во обменов/вставок".ljust(30), str(sort_info[0][2]).ljust(20), str(sort_info[1][2]).ljust(20), str(sort_info[2][2]).ljust(20))
 
 #Виды сортировок
 
@@ -157,21 +85,104 @@ def sort_select(sorted_list):
     return sorted_list, srav, prirav
 
 def sort_insert(sorted_list):
-    prirav = srav = 0
+    vstav = srav = 0
     for i in range(1, len(sorted_list)):
         x = sorted_list[i]
         j = i
         while (j > 0 and sorted_list[j-1] > x):
-            srav += 2
+            srav += 1
             sorted_list[j] = sorted_list[j-1]
-            prirav += 1
+            vstav += 1
             j -= 1
-            print(sorted_list)
         sorted_list[j] = x
-    return sorted_list, srav, prirav
+    return sorted_list, srav, vstav
+
+#Утилиты
+def isnum(number):
+    number_str = str(number)
+    if number_str[0] == "-":
+        number_str = number_str[1:]
+    if len(number_str) < 1:
+        return False
+    ok = True
+    i = 0
+    while ok and i < len(number_str):
+        ok = number_str[i].isdigit()
+        i += 1
+    return ok
+
+def clean(inp_list):
+    sep_list = []
+    for i in range(len(inp_list)):
+        if isnum(inp_list[i]):
+            sep_list.append(int(inp_list[i]))
+    return sep_list
+    
+def gen(length):
+    return [r.randint(-1000, 1000) for _ in range(length)]
+
+#<<Интерфейс>>
+
+def menu():
+    print("Введите список элементов. Чтобы задать случайный список, введите одно число - количество элементов.")
+    inp = input().split()
+    lst_clean = clean(inp)
+    if len(lst_clean) == 0:
+        print("Ошибка обработки данных.")
+        menu()
+        return
+    if len(lst_clean) == 1:
+        lst = gen(lst_clean[0])
+    else:
+        lst = lst_clean
+    
+    print("Выберите тип сортировки. 0 - все типы сортировки, 1 - пузырьком, 2 - простым выбором, 3 - вставками.")
+    inp2 = input()
+    if isnum(inp2):
+        sort_type = int(inp2)
+        if sort_type < 0 or sort_type > 3:
+            print("Введите существующий тип сортировки.")
+            menu()
+            return
+        else:
+            if sort_type == 0:
+                sort_all(lst)
+            else:
+                sort_list(lst, sort_type)
+    else:
+        print("Ошибка обработки данных.")
+        menu()
+        return
+
+def sort_all(lst):
+    sort_info = []
+    sort_info.append(sort_bubble(lst.copy()))
+    sort_info.append(sort_select(lst.copy()))
+    sort_info.append(sort_insert(lst.copy()))
+    print("======Результаты======".center(80))
+    print("Вид сортировки".ljust(30), "Пузырьком".ljust(20), "Простым выбором".ljust(20), "Вставками".ljust(20))
+    print("Кол-во сравнений".ljust(30), str(sort_info[0][1]).ljust(20), str(sort_info[1][1]).ljust(20), str(sort_info[2][1]).ljust(20))
+    print("Кол-во приравниваний/вставок".ljust(30), str(sort_info[0][2]).ljust(20), str(sort_info[1][2]).ljust(20), str(sort_info[2][2]).ljust(20))
+    print("Отсортированный список: ", *(sort_info[0][0]))
+
+def sort_list(lst, sort_type):
+    if sort_type == 1:
+        otv = sort_bubble(lst)
+    elif sort_type == 2:
+        otv = sort_select(lst)
+    elif sort_type == 3:
+        otv = sort_insert(lst)
+    else:
+        otv = (lst, 0, 0)
+    print("Отсортированный список:", *otv[0])
+    print("Количество сравнений:", otv[1])
+    if sort_type == 3:
+        print("Количество вставок:", otv[2])
+    else:
+        print("Количество приравниваний:", otv[2])
 
 def main():
     menu()
-    
+
 if __name__ == "__main__":
     main()
