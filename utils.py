@@ -17,6 +17,7 @@ def to_number(_s):
 
 def to_word(_s):
     s = str(_s)
+    s = s.replace("_", " ")
     i = 0
     flag = True
     while i < len(s) and flag:
@@ -59,4 +60,16 @@ def to_int(_s):
         i += 1
     if len(s) == 0:
         return 0
+    return int(s)
+
+def to_int2(_s):
+    s = str(_s)
+    i = 0
+    while i < len(s):
+        if not s[i].isdigit():
+            s = s[:i] + s[i+1:]
+            i -= 1
+        i += 1
+    if len(s) == 0:
+        return -1
     return int(s)
