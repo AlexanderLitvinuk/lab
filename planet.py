@@ -3,14 +3,13 @@ from utils import to_number, to_word, to_int
 types_list = ("каменная","газовый гигант", "ледяной гигант")
 
 class Planet:
-    def __init__(self, name, radius, mass, length, typep, idp):
-        self.idp = idp
+    def __init__(self, name, radius, mass, length, typep):
         self.name = name
         self.radius = radius
         self.mass = mass
         self.length = length
         self.typep = typep
-        print("Создана планета " + self.name + " с ID " + str(self.idp))
+        print("Создана планета " + self.name)
         
     @property
     def name(self):
@@ -31,10 +30,6 @@ class Planet:
     @property
     def typep(self):
         return self._typep
-    
-    @property
-    def idp(self):
-        return self._idp
         
     @name.setter
     def name(self, name):
@@ -71,18 +66,9 @@ class Planet:
             self._typep = _s
         else:
             self._typep = "не установлено"
-    
-    @idp.setter 
-    def idp(self, idp):
-        _n = to_int(idp)
-        if _n > 0:
-            self._idp = _n
-        else:
-            self._idp = 0
 
     def __repr__(self):
         s = []
-        s.append(str(self.idp))
         s.append(self.name)
         s.append(str(self.radius))
         s.append(str(self.mass))
@@ -93,7 +79,6 @@ class Planet:
 
     def __str__(self):
         s = []
-        s.append("ID: " + str(self.idp))
         s.append("Название: " + self.name)
         s.append("Радиус: " + str(self.radius) + " км")
         s.append("Масса: " + str(self.mass) + " млн тонн")
@@ -106,7 +91,11 @@ class Planet:
         return self.length < other.length
     
     def __eq__(self, other):
+        print("type shit", repr(self), repr(other))
         return self.name == other.name
     
     def __del__(self):
-        print("Удалена планета " + self.name + " с ID " + str(self.idp))
+        print("Удалена планета " + self.name)
+    
+    def __copy__(self):
+        print("Продублирована планета " + self.name)
